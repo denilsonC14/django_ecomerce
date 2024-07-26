@@ -14,20 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from todo import views                            # add this
-from rest_framework import routers                    # add this
-from django.urls import path, include                 # add this
+from django.urls import path, include
+from rest_framework import routers
+from todo import views
+from rest_framework.authtoken.views import obtain_auth_token
 
-router = routers.DefaultRouter()                      # add this
-router.register(r'tasks', views.TodoView, 'task')     # add this
-
-# from django.urls import path  - DELETE THIS
+router = routers.DefaultRouter()
+router.register(r'tasks', views.TodoView, 'task')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))                # add this
+    path('api/', include(router.urls)),
+    path('api/register/', views.RegisterView.as_view(), name='register'),
+    path('api/login/', views.LoginView.as_view(), name='login'),
+    path('api/logout/', views.LogoutView.as_view(), name='logout'),
 ]
-
 '''
 This is the final step that completes the building of the API, we can now perform CRUD operations on the todo model
 router allows us to do 2 things :

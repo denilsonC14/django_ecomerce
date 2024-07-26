@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo',
+    
     'corsheaders',            # add this
-    'rest_framework',         # add this
+ 'rest_framework',
+    'rest_framework.authtoken',
+    'todo.apps.TodoConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -51,6 +55,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',    # add this
+    
+    
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -125,8 +131,21 @@ STATIC_URL = '/static/'
 
 # Add this
 # we whitelist localhost:3000 because that's where frontend will be served
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-)
-
+ # Solo para desarrollo
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
 '''Django-cors-headers is a python library that will help in preventing the errors that we would normally get due to CORS. rules. In the CORS_ORIGIN_WHITELIST snippet, we whitelisted localhost:3000 because we want the frontend (which will be served on that port) of the application to interact with the API.'''
+# At the end of your settings.py file, add these:
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
