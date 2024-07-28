@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
-import '../styles/globals.css'
+
 import RegisterForm from '../components/RegisterForm';
 import { register } from '../utils/api';
 
